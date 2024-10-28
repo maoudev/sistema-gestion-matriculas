@@ -1,42 +1,46 @@
 # Contribuir a este Proyecto
 
-## 1. Haz un Fork del Repositorio
+¡Gracias por tu interés en contribuir! A continuación, se detallan los pasos para hacer contribuciones al proyecto.
 
-Haz un fork del repositorio para tener tu propia copia del proyecto. Luego, clona tu fork en tu máquina local con el siguiente comando:
+## Pasos para Contribuir
 
-```bash
-git clone https://github.com/tu-usuario/tu-repositorio.git
-```
+1. **Clona el Repositorio**
 
-## 2. Crea una Nueva Rama
+   Si aún no lo has hecho, clona el repositorio en tu máquina local:
 
-Antes de hacer cambios, crea una rama nueva. Esto ayuda a mantener el historial de cambios organizado.
+   ```bash
+   git clone https://github.com/maoudev/sistema-gestion-matriculas.git
+   ```
 
-```bash
-git checkout -b nombre-de-tu-rama
-```
+2. **Crea una Nueva Rama**
 
-## 3. Realiza tus Cambios
+   Antes de realizar cambios, crea una nueva rama para tu trabajo:
 
-Realiza los cambios necesarios en el código y guarda tus progresos.
+   ```bash
+   git checkout -b nombre-de-tu-rama
+   ```
 
-## 4. Agrega y Haz Commit de tus Cambios
+3. **Realiza tus Cambios**
 
-Agrega los cambios que has realizado al área de preparación y realiza un commit con un mensaje descriptivo.
+   Realiza los cambios necesarios en el código y guarda tus progresos.
 
-```bash
-git add .
-git commit -m "Descripción breve de tus cambios"
-```
+4. **Agrega y Haz Commit de tus Cambios**
 
-## 5. Sube tus Cambios
+   Agrega los cambios al área de preparación y realiza un commit con un mensaje descriptivo:
 
-Envía tus cambios a tu fork en GitHub con el siguiente comando:
+   ```bash
+   git add .
+   git commit -m "Descripción breve de tus cambios"
+   ```
 
-```bash
-git push origin nombre-de-tu-rama
-```
+5. **Sube tus Cambios**
 
-## 6. Crea un Pull Request
+   Envía tus cambios a la rama correspondiente en el repositorio:
 
-Abra el fork del proyecto  y seleccione el botón <strong>Compare and pull request</strong> en el cuadro de sugerencias que aparece.
+   ```bash
+   git push origin nombre-de-tu-rama
+   ```
+
+6. **Crea un Pull Request**
+
+   Una vez que tus cambios estén en GitHub, ve al repositorio y crea un Pull Request (PR).
