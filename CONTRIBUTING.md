@@ -1,7 +1,5 @@
 # Contribuir a este Proyecto
 
-¡Gracias por tu interés en contribuir! A continuación, se detallan los pasos para hacer contribuciones al proyecto.
-
 ## Pasos para Contribuir
 
 1. **Clona el Repositorio**
