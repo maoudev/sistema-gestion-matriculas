@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Docente - Listado de Funcionarios</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <!-- Primera barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/menu_admin">Dashboard Administrador</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarMain"
+        aria-controls="navbarMain"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="funcionarios/agregar"
+              >Gestión Funcionarios</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/matriculas/agregar"
+              >Gestión Matrículas</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Gestión Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Gestión Nacionalidades</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Historial de Acciones</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#">Ver Perfil</a></li>
+          <li class="nav-item"><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Segunda barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+      <div class="collapse navbar-collapse" id="navbarSub">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="agregar">Agregar Funcionarios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="editar">Editar Funcionarios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="eliminar">Eliminar Funcionarios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="listar">Listado de Funcionarios</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Contenido: Listado de Funcionarios -->
+    <div class="container mt-4">
+      <h2>Listado de Funcionarios</h2>
+
+      <!-- Tabla de funcionarios -->
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>Nombres</th>
+              <th>Apellido Paterno</th>
+              <th>Apellido Materno</th>
+              <th>RUT</th>
+              <th>Cargo</th>
+              <th>Correo</th>
+              <th>Cursos</th>
+              <th>Jefatura</th>
+              <th>Asignatura</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Fila de ejemplo -->
+            <tr>
+              <td>1</td>
+              <td>Juan</td>
+              <td>Pérez</td>
+              <td>Gómez</td>
+              <td>12.345.678-9</td>
+              <td>Docente</td>
+              <td>juan.perez@ejemplo.com</td>
+              <td>Matemáticas</td>
+              <td>Sí</td>
+              <td>Álgebra</td>
+            </tr>
+            <!-- Puedes agregar más filas aquí con la misma estructura para cada funcionario -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

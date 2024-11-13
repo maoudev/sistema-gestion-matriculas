@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Docente</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <!-- Primera barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/menu_admin">Dashboard Administrador</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarMain"
+        aria-controls="navbarMain"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="/funcionarios/agregar"
+              >Gestión Funcionarios</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/matriculas/agregar"
+              >Gestión Matrículas</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Gestión Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Gestión Nacionalidades</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Historial de Acciones</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#">Ver Perfil</a></li>
+          <li class="nav-item"><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Segunda barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+      <div class="collapse navbar-collapse" id="navbarSub">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="agregar">Agregar Funcionarios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="editar">Editar Funcionarios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="eliminar">Eliminar Funcionarios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="listar">Listado de Funcionarios</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Contenido: Formulario de "Agregar Funcionario" -->
+    <div class="container mt-4">
+      <h2>Agregar Funcionario</h2>
+      <form>
+        <div class="row">
+          <!-- Campo Nombres -->
+          <div class="col-md-4 mb-3">
+            <label for="nombres">Nombres</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nombres"
+              placeholder="Nombres"
+            />
+          </div>
+          <!-- Campo Apellido Paterno -->
+          <div class="col-md-4 mb-3">
+            <label for="apellidoPaterno">Apellido Paterno</label>
+            <input
+              type="text"
+              class="form-control"
+              id="apellidoPaterno"
+              placeholder="Apellido Paterno"
+            />
+          </div>
+          <!-- Campo Apellido Materno -->
+          <div class="col-md-4 mb-3">
+            <label for="apellidoMaterno">Apellido Materno</label>
+            <input
+              type="text"
+              class="form-control"
+              id="apellidoMaterno"
+              placeholder="Apellido Materno"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <!-- Campo ID -->
+          <div class="col-md-4 mb-3">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" placeholder="ID" />
+          </div>
+          <!-- Campo RUT -->
+          <div class="col-md-4 mb-3">
+            <label for="rut">RUT</label>
+            <input
+              type="text"
+              class="form-control"
+              id="rut"
+              placeholder="RUT"
+            />
+          </div>
+          <!-- Campo Cargo -->
+          <div class="col-md-4 mb-3">
+            <label for="cargo">Cargo</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cargo"
+              placeholder="Cargo"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <!-- Campo Correo -->
+          <div class="col-md-4 mb-3">
+            <label for="correo">Correo</label>
+            <input
+              type="email"
+              class="form-control"
+              id="correo"
+              placeholder="Correo"
+            />
+          </div>
+          <!-- Select Cursos -->
+          <div class="col-md-4 mb-3">
+            <label for="cursos">Cursos</label>
+            <select class="form-control" id="cursos">
+              <option value="" selected disabled>Seleccione un curso</option>
+            </select>
+          </div>
+          <!-- Radio Jefatura -->
+          <div class="col-md-4 mb-3">
+            <label>Jefatura</label>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="jefatura"
+                id="jefaturaSi"
+                value="si"
+              />
+              <label class="form-check-label" for="jefaturaSi">Sí</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="jefatura"
+                id="jefaturaNo"
+                value="no"
+                checked
+              />
+              <label class="form-check-label" for="jefaturaNo">No</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <!-- Select Asignatura -->
+          <div class="col-md-4 mb-3">
+            <label for="asignatura">Asignatura</label>
+            <select class="form-control" id="asignatura">
+              <option value="" selected disabled>
+                Seleccione una asignatura
+              </option>
+            </select>
+          </div>
+        </div>
+        <!-- Botón Agregar -->
+        <button type="submit" class="btn btn-primary">Agregar</button>
+      </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
