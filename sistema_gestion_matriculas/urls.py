@@ -7,6 +7,7 @@ from matriculas.views import funcionarios
 from matriculas.views import cursos
 from matriculas.views import nacionalidades
 from matriculas.views import historial_acciones
+from matriculas.views import perfil
 
 
 urlpatterns = [
