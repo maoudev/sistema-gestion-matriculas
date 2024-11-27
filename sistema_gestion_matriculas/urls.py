@@ -52,4 +52,8 @@ urlpatterns = [
 
     #historial
     path('historial/', historial_acciones.historial_acciones, name='historial_acciones'),
+
+    #Perfil
+    path('perfil/', perfil.mostrar_perfil, name='perfil'),
+    path('perfil/editar', perfil.editar_perfil, name='editar_perfil'),
 ]
