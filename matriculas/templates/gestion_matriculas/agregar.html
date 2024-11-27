@@ -111,9 +111,7 @@
           icon: "success",
         });
       </script>
-      {% endif %} 
-      
-      {% if r2 %}
+      {% endif %} {% if r2 %}
       <script>
         Swal.fire({
           title: "Oh no...",
@@ -124,13 +122,9 @@
       {% endif %}
 
       <h1 class="text-center my-5 fw-bold">Agregar matrícula</h1>
-      <form
-        action="/matriculas/agregar_matricula"
-        method="post"
-        class="row g-3"
-      >
-        {% csrf_token %}
 
+      <form action="/matriculas/cargar_cursos" method="post" class="row g-3">
+        {% csrf_token %}
         <div class="col-md-6">
           <select class="form-select" name="cboper" id="cboper" required>
             <option selected disabled value="">Selecciona un periodo</option>
@@ -138,9 +132,28 @@
             <option value="{{ per.id }}">{{ per.anio }}</option>
             {% endfor %}
           </select>
-        </div>
 
-        <h2 class="fs-3">Datos del apoderado</h2>
+          <button type="submit" class="btn btn-primary mt-2">
+            Cargar cursos
+          </button>
+        </div>
+      </form>
+
+      <form
+        action="/matriculas/agregar_matricula"
+        method="post"
+        class="row g-3"
+      >
+        {% csrf_token %}
+        <input
+          type="text"
+          name="cboper"
+          value="{{ periodo.id }}"
+          style="opacity: 0"
+        />
+
+        <h2 class="fs-3 mt-5">Datos del apoderado</h2>
+
         <div class="col-md-12">
           <label for="txtnom" class="form-label">Nombres</label>
           <input

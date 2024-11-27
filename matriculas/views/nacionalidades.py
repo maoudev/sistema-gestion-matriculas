@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from matriculas.models import Nacionalidad  
+from matriculas.models import Nacionalidad, RegistroAccion, Funcionario
+
+from datetime import datetime
 
 def gestionar_nacionalidades(request):
     tipo = request.session.get('tipo')
@@ -13,6 +15,10 @@ def gestionar_nacionalidades(request):
                 nombre = request.POST.get("nombre")
                 if nombre:
                     Nacionalidad.objects.create(nombre=nombre)
+
+                    usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))
+                    historial = RegistroAccion(usuario=usuario, accion='Registrar Nacionalidad', detalles='Nacionalidad registrada correctamente!', fecha=datetime.now())
+                    historial.save()
                     return redirect("gestion_nacionalidades")
 
             return render(request, "gestion_nacionalidades/gestion_nacionalidades.html", {
@@ -34,6 +40,10 @@ def editar_nacionalidad(request, nacionalidad_id):
     if request.method == "POST":
         nacionalidad.nombre = request.POST.get("nombre")
         nacionalidad.save()
+
+        usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))
+        historial = RegistroAccion(usuario=usuario, accion='Editar Periodo', detalles='Periodo editado correctamente!', fecha=datetime.now())
+        historial.save()
         return redirect("gestion_nacionalidades")
     return render(request, "gestion_nacionalidades/editar_nacionalidad.html", {"nacionalidad": nacionalidad})
 
@@ -41,4 +51,8 @@ def editar_nacionalidad(request, nacionalidad_id):
 def eliminar_nacionalidad(request, nacionalidad_id):
     nacionalidad = get_object_or_404(Nacionalidad, id=nacionalidad_id)
     nacionalidad.delete()
+
+    usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))
+    historial = RegistroAccion(usuario=usuario, accion='Eliminar Periodo', detalles='Periodo eliminado correctamente!', fecha=datetime.now())
+    historial.save()
     return redirect("gestion_nacionalidades")

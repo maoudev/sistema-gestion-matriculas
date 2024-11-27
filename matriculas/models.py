@@ -43,10 +43,11 @@ class Curso(models.Model):
     )
     profesores = models.ManyToManyField(
         Funcionario, 
-        related_name='profesores'
+        related_name='cursos',
     )
     sala = models.ForeignKey(Sala, on_delete=models.SET_NULL, null=True)
     cantidad_alumnos = models.IntegerField(default=0)
+    periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, null=True)
 
     
     def __str__(self):

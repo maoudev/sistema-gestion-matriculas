@@ -11,12 +11,10 @@ def mostrar_agregar(request):
         if tipo == 'admin' or tipo == 'funcionario':
             nacionalidades = Nacionalidad.objects.all().values()
             periodos = Periodo.objects.all().values()
-            cursos = Curso.objects.all().values()
             return render(request, 'gestion_matriculas/agregar.html', {
                 'tipo': tipo,
                 'nacionalidades': nacionalidades,
                 'periodos': periodos,
-                'cursos': cursos,
             })
         else:
             return render(request, 'menu_docente.html', {
@@ -27,6 +25,16 @@ def mostrar_agregar(request):
             'r2': 'Debe iniciar sesión'
         })
 
+def cargar_cursos(request):
+    periodo_id = request.POST.get('cboper')
+    periodo_seleccionado = Periodo.objects.get(id=periodo_id)
+    cursos = Curso.objects.filter(periodo=periodo_seleccionado).values()
+    nacionalidades = Nacionalidad.objects.all().values()
+    return render(request, 'gestion_matriculas/agregar.html', {
+        'cursos': cursos,
+        'nacionalidades': nacionalidades,
+        'periodo': periodo_seleccionado,
+    })
 
 def mostrar_editar(request, id):
     tipo = request.session.get('tipo')
@@ -34,14 +42,14 @@ def mostrar_editar(request, id):
     if tipo and estadoSesion:
         if tipo == 'admin':
             matricula = Matricula.objects.get(id=id)
+            periodo = matricula.periodo
             nacionalidades = Nacionalidad.objects.all().values()
-            periodos = Periodo.objects.all().values()
-            cursos = Curso.objects.all().values()
+            cursos = Curso.objects.filter(periodo=periodo).values()
             return render(request, 'gestion_matriculas/editar.html', {
                 'tipo': tipo,
                 'matricula': matricula,
                 'nacionalidades': nacionalidades,
-                'periodos': periodos,
+                'periodo': periodo,
                 'cursos': cursos,
                 'id': id,
             })
@@ -95,15 +103,10 @@ def mostrar_listado(request):
 # matriculas
 
 def registrar_matricula(request):
-    try:
+    try: 
         periodo = request.POST["cboper"]
         periodo_seleccionado = Periodo.objects.get(id=periodo)
 
-        if periodo_seleccionado.activo == False:
-            return render(request, 'gestion_matriculas/agregar.html', {
-                'r2': 'El periodo seleccionado no está activo',
-            })
-        
         # Apoderado
         nombre_apoderado = request.POST["txtnom"]
         apellido_paterno_apoderado = request.POST["txtapepat"]
@@ -199,6 +202,9 @@ def registrar_matricula(request):
 
         matricula = Matricula(alumno = alumno, periodo = periodo_seleccionado, apoderado = apoderado_apoderado, curso = curso_seleccionado)
         matricula.save()
+
+        curso_seleccionado.cantidad_alumnos += 1
+        curso_seleccionado.save()
 
         id_usuario = request.session.get('idUsuario')
         usuario = Funcionario.objects.get(id=id_usuario)

@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from matriculas.models import Funcionario, Curso
+from matriculas.models import Funcionario, Curso, RegistroAccion
+
+from datetime import datetime
 
 from matriculas.utils import hash_password
 
@@ -47,6 +49,9 @@ def mostrar_agregar(request):
             curso.save()
         
 
+        usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))
+        historial = RegistroAccion(usuario=usuario, accion='Registrar funcionario', detalles='Funcionario registrado correctamente!', fecha=datetime.now())
+        historial.save()
 
 
         return render(request, "gestion_funcionarios/agregar.html", {
@@ -102,13 +107,16 @@ def mostrar_editar(request, id):
             curso.profesores.add(funcionario)
             curso.save()
 
-        
-        cursos_normales = Curso.objects.filter(profesores=funcionario).exclude(profesor_jefe=funcionario)
-        funcionarios = Funcionario.objects.prefetch_related('profesores')
 
-        for funcionario in funcionarios:
-            cursos_normales = funcionario.cursos.exclude(profesor_jefe=funcionario)
-        
+
+        usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))
+        historial = RegistroAccion(usuario=usuario, accion='Editar funcionario', detalles='Funcionario editado correctamente!', fecha=datetime.now())
+        historial.save()
+
+        cursos = Curso.objects.values().all()
+        funcionarios = Funcionario.objects.prefetch_related('cursos')
+
+
         return render(request, "gestion_funcionarios/listar.html", {
             'r': 'Funcionario editado correctamente',
             "funcionarios": funcionarios,
@@ -126,8 +134,12 @@ def mostrar_eliminar(request, id):
     funcionario = get_object_or_404(Funcionario, id=id)
     funcionario.delete()
 
-    funcionarios = Funcionario.objects.prefetch_related('profesores') 
-    cursos = Curso.objects.all().values()
+    usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))
+    historial = RegistroAccion(usuario=usuario, accion='Eliminar funcionario', detalles='Funcionario eliminado correctamente!', fecha=datetime.now())
+    historial.save()
+
+    cursos = Curso.objects.values().all()
+    funcionarios = Funcionario.objects.prefetch_related('cursos')
     return render(request, 'gestion_funcionarios/listar.html', {
         'r': 'Funcionario eliminado correctamente',
         "funcionarios": funcionarios,
@@ -135,8 +147,8 @@ def mostrar_eliminar(request, id):
     })
 
 def mostrar_listado(request):
-    funcionarios = Funcionario.objects.prefetch_related('profesores') 
-    cursos = Curso.objects.all().values()
+    cursos = Curso.objects.values().all()
+    funcionarios = Funcionario.objects.prefetch_related('cursos')
     return render(request, 'gestion_funcionarios/listar.html', {
         "funcionarios": funcionarios,
         "cursos": cursos

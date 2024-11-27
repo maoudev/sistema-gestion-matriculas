@@ -19,6 +19,7 @@ urlpatterns = [
 
     # Matriculas
     path('matriculas/agregar', matriculas.mostrar_agregar),
+    path('matriculas/cargar_cursos', matriculas.cargar_cursos),
     path("matriculas/agregar_matricula", matriculas.registrar_matricula),
 
     path('matriculas/editar/<int:id>', matriculas.mostrar_editar),
@@ -35,8 +36,14 @@ urlpatterns = [
 
     # cursos
     path('cursos/', cursos.mostrar_gestion_cursos, name='gestion_cursos'),
+    path('cursos/filtrar/periodo', cursos.filtrar_por_periodo),
     path('cursos/editar/<curso_id>/', cursos.editar_curso, name='editar_curso'),
     path('cursos/eliminar/<int:pk>/', cursos.eliminar_curso, name='eliminar_curso'),
+    path('cursos/periodos/', cursos.mostrar_gestion_periodos, name='gestion_periodos'),
+    path('cursos/periodos/editar/<int:id>/', cursos.editar_periodo, name='editar_periodo'),
+    path('cursos/periodos/eliminar/<int:id>/', cursos.eliminar_periodo, name='eliminar_periodo'),
+
+    
 
     #nacionalidad
      path("nacionalidades/", nacionalidades.gestionar_nacionalidades, name="gestion_nacionalidades"),

@@ -9,6 +9,11 @@ class Command(BaseCommand):
     help = 'Insertar usuarios por defecto'
     
     def handle(self, *args: Any, **options: Any) -> str | None:
+                
+        funcionarios = [
+            Funcionario(rut='12345678-9', nombres='Juan', paterno='Perez', materno='Gonzalez', correo='juan.perez@gmail.com', cargo='docente', asignatura='Matematicas', jefatura=True, password=hash_password('docente123')),
+            Funcionario(rut='11222333-4', nombres='David', paterno='Silva', materno='Díaz', correo='david.silva@gmail.com', cargo='admin', jefatura=False, password=hash_password('admin123')),
+        ]
         salas = []
         for i in range(200, 250):
             salas.append(Sala(numero = i))
@@ -51,8 +56,9 @@ class Command(BaseCommand):
         sala = Sala.objects.get(numero=200)
         profesor_jefe = Funcionario.objects.get(rut='12345678-9')
 
+        periodo = Periodo.objects.get(anio=2024)
         cursos = (
-            Curso(nombre = '1A', profesor_jefe = profesor_jefe, sala = sala),
+            Curso(nombre = '1A', profesor_jefe = profesor_jefe, sala = sala, periodo = periodo),
         )
 
         Curso.objects.bulk_create(cursos)

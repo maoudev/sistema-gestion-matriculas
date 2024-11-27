@@ -3,43 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestión de Cursos</title>
+    <title>Gestión de periodos</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <!-- JavaScript -->
-    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
-
-    <!-- CSS -->
-    <link
-      rel="stylesheet"
-      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"
-    />
-    <!-- Default theme -->
-    <link
-      rel="stylesheet"
-      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"
-    />
-    <!-- Semantic UI theme -->
-    <link
-      rel="stylesheet"
-      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css"
-    />
-    <!-- Bootstrap theme -->
-    <link
-      rel="stylesheet"
-      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.min.css"
-    />
-
-    <script src="
-          https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js
-          "></script>
-    <link
-      href="
-          https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
-          "
-      rel="stylesheet"
     />
   </head>
   <body>
@@ -94,91 +61,70 @@
       <div class="collapse navbar-collapse" id="navbarSub">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/cursos/periodos/">Gestionar periodos</a>
+            <a class="nav-link" href="/cursos/">Gestionar cursos</a>
           </li>
         </ul>
       </div>
     </nav>
 
-    {% if r %}
-    <script>
-      alertify.success("{{r}}");
-    </script>
-    {% endif %} {% if r2 %}
-    <script>
-      alertify.error("{{r2}}");
-    </script>
-    {% endif %}
-
     <!-- Contenido principal -->
     <div class="container mt-4">
-      <h2>Gestión de Cursos</h2>
+      <h2>Gestión de Periodos</h2>
 
       <!-- Formulario para agregar curso -->
       <form method="post" class="mb-4">
         {% csrf_token %}
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="cboper">Periodo</label>
-            <select id="cboper" name="cboper" class="form-control" required>
-              <option value="" disabled selected>Seleccione un periodo</option>
-              {% for periodo in periodos %}
-              <option value="{{ periodo.id }}">{{ periodo.anio }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="form-group col-md-6">
-            <label for="nombre">Nombre del curso</label>
+            <label for="txtani">Año</label>
             <input
-              type="text"
-              id="nombre"
-              name="nombre"
+              type="number"
+              id="txtani"
+              name="txtani"
               class="form-control"
-              placeholder="Ej: 2"
+              placeholder="Ej: 2024"
               required
             />
           </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Agregar Curso</button>
-      </form>
 
-      <form method="post" action="/cursos/filtrar/periodo" class="mb-4">
-        {% csrf_token %}
-        <div class="form-row">
-          <div class="form-group col-md-3">
-            <label for="cboper2">Periodos</label>
-            <select class="form-control" id="cboper2" name="cboper2" required>
-              <option value="" disabled selected>Seleccione un periodo</option>
-              {% for periodo in periodos %}
-              <option value="{{ periodo.id }}">{{ periodo.anio }}</option>
-              {% endfor %}
+          <div class="form-group col-md-6">
+            <label for="cboest">Estado</label>
+            <select class="form-control" id="cboest" name="cboest" required>
+              <option disabled selected value="">Seleccione un estado</option>
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo</option>
             </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-primary">Agregar Periodo</button>
       </form>
+
       <!-- Tabla de cursos -->
       <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
-            <th>Nombre</th>
-            <th>Cantidad de Alumnos</th>
+            <th>ID</th>
+            <th>Año</th>
+            <th>Estado</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {% for curso in cursos %}
+          {% for periodo in periodos %}
           <tr>
-            <td>{{ curso.nombre }}</td>
-            <td>{{ curso.cantidad_alumnos }}</td>
+            <td>{{ periodo.id }}</td>
+            <td>{{ periodo.anio }}</td>
+            <td>
+              {% if periodo.activo %} Activo {% else %} Inactivo {% endif %}
+            </td>
             <td class="text-center">
               <a
-                href="{% url 'editar_curso' curso.id %}"
+                href="/cursos/periodos/editar/{{ periodo.id }}"
                 class="btn btn-warning btn-sm"
                 >Editar</a
               >
               <a
-                href="{% url 'eliminar_curso' curso.id %}"
+                href="/cursos/periodos/eliminar/{{ periodo.id }}"
                 class="btn btn-danger btn-sm"
                 onclick="return confirm('¿Estás seguro de eliminar este curso?');"
                 >Eliminar</a
@@ -188,7 +134,7 @@
           {% empty %}
           <tr>
             <td colspan="3" class="text-center text-muted">
-              No hay cursos registrados.
+              No hay periodos registrados.
             </td>
           </tr>
           {% endfor %}

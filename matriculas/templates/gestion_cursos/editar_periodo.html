@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Editar Curso</title>
+    <title>Editar Periodo</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -56,21 +56,31 @@
     </nav>
 
     <div class="container mt-4">
-      <h2 class="text-center mb-4">Editar Curso</h2>
+      <h2 class="text-center mb-4">Editar Periodo</h2>
 
       <!-- Formulario de edición -->
       <form method="post">
         {% csrf_token %}
         <div class="form-group">
-          <label for="nombre">Nombre del curso</label>
+          <label for="txtani">Año</label>
           <input
-            type="text"
-            id="nombre"
-            name="nombre"
+            type="number"
+            id="txtani"
+            name="txtani"
             class="form-control"
-            value="{{ curso.nombre }}"
+            value="{{ periodo.anio }}"
             required
           />
+
+          <label for="cboest">Estado</label>
+          <select id="cboest" name="cboest" class="form-control" required>
+            <option value="activo" {% if periodo.activo %} selected {% endif %}>
+              Activo
+            </option>
+            <option value="inactivo" {% if periodo.activo == False %} selected {% endif %}>
+              Inactivo
+            </option>
+          </select>
         </div>
         <button type="submit" class="btn btn-primary w-100">
           Guardar Cambios
