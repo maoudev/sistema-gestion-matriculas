@@ -49,9 +49,9 @@
               <a class="nav-link text-light active" aria-current="page" href="#"
                 >Gestión Matriculas</a
               >
-              <a class="nav-link text-light" href="#">Gestión Cursos</a>
-              <a class="nav-link text-light" href="#">Gestión Nacionalidades</a>
-              <a class="nav-link text-light" href="#">Historial de Acciones</a>
+              <a class="nav-link text-light" href="/cursos">Gestión Cursos</a>
+              <a class="nav-link text-light" href="/nacionalidades">Gestión Nacionalidades</a>
+              <a class="nav-link text-light" href="/historial">Historial de Acciones</a>
             {% elif tipo == 'funcionario' %}
               <a class="nav-link text-light active" aria-current="page" href="#"
               >Gestión Matriculas</a>
@@ -69,16 +69,11 @@
       <div class="collapse navbar-collapse" id="navbarSub">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="agregar">Agregar Matrícula</a>
+            <a class="nav-link" href="/matriculas/agregar">Agregar Matrícula</a>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link active" href="editar">Editar Matrícula</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="eliminar">Eliminar Matrícula</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="listar">Listado de Matrícula</a>
+            <a class="nav-link" href="/matriculas/listar">Listado de Matrícula</a>
           </li>
         </ul>
       </div>
@@ -87,7 +82,7 @@
     <main class="container-fluid w-50 pb-5">
       {% if r %}
       <div class="alert alert-success alert-dismissible" role="alert">
-        <div>{r}</div>
+        <div>{{ r }}</div>
         <button
           type="button"
           class="btn-close"
@@ -95,7 +90,7 @@
           aria-label="Close"
         ></button>
       </div>
-      {% endif %} 
+      {% endif %}
       {% if r2 %}
       <div class="alert alert-danger alert-dismissible" role="alert">
         <div>{{ r2 }}</div>
@@ -109,9 +104,23 @@
       {% endif %}
 
       <h1 class="text-center my-5 fw-bold">Editar matrícula</h1>
-      <form action="/editar_matricula/{{matricula.id}}" class="row g-3">
-        <h2 class="fs-3">Datos del apoderado</h2>
+      <form
+        action="/matriculas/editar_matricula/{{ matricula.id }}"
+        method="post"
+        class="row g-3"
+      >
+        {% csrf_token %}
 
+        <div class="col-md-6">
+          <select class="form-select" name="cboper" id="cboper" required>
+            <option selected disabled value="">Selecciona un periodo</option>
+            {% for per in periodos %}
+            <option value="{{ per.id }}" {%if per.id == matricula.periodo.id%}selected{% endif %}>{{ per.anio }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <h2 class="fs-3">Datos del apoderado</h2>
         <div class="col-md-12">
           <label for="txtnom" class="form-label">Nombres</label>
           <input
@@ -120,8 +129,8 @@
             name="txtnom"
             id="txtnom"
             maxlength="50"
-            value="{{ matricula.apoderado.nombres }}"
             placeholder="Ej: Juan Carlos"
+            value="{{ matricula.apoderado.nombres }}"
             required
           />
         </div>
@@ -133,8 +142,8 @@
             name="txtapepat"
             id="txtapepat"
             maxlength="50"
-            value="{{ matricula.apoderado.apellido_paterno }}"
             placeholder="Ej: Pérez"
+            value="{{ matricula.apoderado.paterno }}"
             required
           />
         </div>
@@ -146,8 +155,8 @@
             name="txtapemat"
             id="txtapemat"
             maxlength="50"
+            value="{{ matricula.apoderado.materno }}"
             placeholder="Ej: Díaz"
-            value="{{ matricula.apoderado.apellido_materno }}"
             required
           />
         </div>
@@ -160,8 +169,8 @@
             name="txtpar"
             id="txtpar"
             maxlength="30"
-            placeholder="Ej: Padre"
             value="{{ matricula.apoderado.parentesco }}"
+            placeholder="Ej: Padre"
             required
           />
         </div>
@@ -173,9 +182,9 @@
             class="form-control"
             name="txtrut"
             id="txtrut"
+            value="{{ matricula.apoderado.rut }}"
             maxlength="11"
             placeholder="Ej: 11222333-4"
-            value="{{ matricula.apoderado.rut }}"
             required
           />
         </div>
@@ -188,9 +197,9 @@
             name="txteda"
             id="txteda"
             min="0"
+            value="{{ matricula.apoderado.edad }}"
             max="120"
             placeholder="Ej: 38"
-            value="{{ matricula.apoderado.edad }}"
             required
           />
         </div>
@@ -201,12 +210,10 @@
             <option selected disabled value="">
               Selecciona tu nacionalidad
             </option>
-            {% for nac in nacionalidades %} 
-              {% if nac == matricula.apoderado.nacionalidad %}
-              <option value="{{ nac.id }}" selected>{{ nac.nombre }}</option>
-              {% else %}
-              <option value="{{ nac.id }}">{{ nac.nombre }}</option>
-              {% endif %} 
+            {% for nac in nacionalidades %}
+            <option value="{{ nac.id }}" {% if nac.id in matricula.apoderado.nacionalidades_ids %}selected{% endif %}>
+              {{ nac.nombre }}
+            </option>
             {% endfor %}
           </select>
         </div>
@@ -219,9 +226,9 @@
             class="form-control"
             name="txtnomalu"
             id="txtnomalu"
+            value="{{ matricula.alumno.nombres }}"
             maxlength="50"
             placeholder="Ej: Juan"
-            value="{{ matricula.alumno.nombres }}"
             required
           />
         </div>
@@ -233,8 +240,8 @@
             name="txtapepatalu"
             id="txtapepatalu"
             maxlength="50"
+            value="{{ matricula.alumno.paterno }}"
             placeholder="Ej: Pérez"
-            value="{{ matricula.alumno.apellido_paterno }}"
             required
           />
         </div>
@@ -245,9 +252,9 @@
             class="form-control"
             name="txtapematalu"
             id="txtapematalu"
+            value="{{ matricula.alumno.materno }}"
             maxlength="50"
             placeholder="Ej: Díaz"
-            value="{{ matricula.alumno.apellido_materno }}"
             required
           />
         </div>
@@ -260,8 +267,8 @@
             name="txtrutalu"
             id="txtrutalu"
             maxlength="11"
-            placeholder="Ej: 11222333-4"
             value="{{ matricula.alumno.rut }}"
+            placeholder="Ej: 11222333-4"
             required
           />
         </div>
@@ -272,11 +279,11 @@
             type="number"
             class="form-control"
             name="txtedaalu"
+            value="{{ matricula.alumno.edad }}"
             id="txtedaalu"
             min="0"
             max="120"
             placeholder="Ej: 12"
-            value="{{ matricula.alumno.edad }}"
             required
           />
         </div>
@@ -287,41 +294,24 @@
             <option selected disabled value="">
               Selecciona tu nacionalidad
             </option>
-            {% for nac in nacionalidades %} 
-              {% if nac == matricula.alumno.nacionalidad %}
-              <option value="{{ nac.id }}" selected>{{ nac.nombre }}</option>
-              {% else %}
-              <option value="{{ nac.id }}">{{ nac.nombre }}</option>
-              {% endif %} 
+            {% for nac in nacionalidades %}
+            <option value="{{ nac.id }}" {% if nac.id in matricula.alumno.nacionalidades_ids %}selected{% endif %}>
+              {{ nac.nombre }}
+            </option>
             {% endfor %}
           </select>
         </div>
 
         <div class="col-md-12">
-          <label for="txtcuralu" class="form-label">Curso</label>
-          <input
-            type="text"
-            class="form-control"
-            name="txtcuralu"
-            id="txtcuralu"
-            maxlength="2"
-            placeholder="Ej: 1A"
-            value="{{ matricula.alumno.curso }}"
-            required
-          />
-        </div>
-
-        <div class="col-md-12">
-          <label for="txtsalalu" class="form-label">Sala</label>
-          <input
-            type="number"
-            class="form-control"
-            name="txtsalalu"
-            id="txtsalalu"
-            placeholder="Ej: 203"
-            value="{{ matricula.alumno.sala }}"
-            required
-          />
+          <label for="cbocur" class="form-label">Curso</label>
+          <select id="cbocur" name="cbocur" class="form-select" required>
+            <option selected disabled value="">Selecciona un curso</option>
+            {% for cur in cursos %}
+            <option value="{{ cur.id }}" {% if cur.id == matricula.curso.id %}selected{% endif %}>
+              {{ cur.nombre }}
+            </option>
+            {% endfor %}
+          </select>
         </div>
 
         <div class="col-md-12">
@@ -330,17 +320,16 @@
             type="number"
             class="form-control"
             name="txtproalu"
+            value="{{ matricula.promedio_anterior }}"
             id="txtproalu"
             placeholder="Ej: 67"
-            value="{{ matricula.alumno.promedio_anterior }}"
             required
           />
         </div>
 
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary">Editar</button>
       </form>
     </main>
-
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

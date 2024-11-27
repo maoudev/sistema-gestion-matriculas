@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Nacionalidades</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/menu_admin">Dashboard Administrador</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarMain"
+        aria-controls="navbarMain"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/funcionarios/agregar"
+              >Gestión Funcionarios</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/matriculas/agregar"
+              >Gestión Matrículas</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/cursos/">Gestión Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/nacionalidades"
+              >Gestión Nacionalidades</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/historial">Historial de Acciones</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Ver Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Cerrar Sesión</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <h2 class="text-center mb-4">Gestión de Nacionalidades</h2>
+
+      <!-- Formulario para agregar nacionalidad -->
+      <form method="post" class="mb-4">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="nombre">Nombre de la nacionalidad</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            class="form-control"
+            placeholder="Ej: Chilena"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">
+          Agregar Nacionalidad
+        </button>
+      </form>
+
+      <!-- Tabla de nacionalidades -->
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Nombre</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for nacionalidad in nacionalidades %}
+          <tr>
+            <td>{{ nacionalidad.nombre }}</td>
+            <td class="text-center">
+              <a
+                href="{% url 'editar_nacionalidad' nacionalidad.id %}"
+                class="btn btn-warning btn-sm"
+                >Editar</a
+              >
+              <a
+                href="{% url 'eliminar_nacionalidad' nacionalidad.id %}"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('¿Estás seguro de eliminar esta nacionalidad?');"
+                >Eliminar</a
+              >
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="2" class="text-center text-muted">
+              No hay nacionalidades registradas.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

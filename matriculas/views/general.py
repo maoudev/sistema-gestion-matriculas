@@ -1,7 +1,9 @@
 from django.shortcuts import render
 
-from matriculas.models import Usuario
+from matriculas.models import Funcionario, RegistroAccion
 from matriculas.utils import check_password
+
+from datetime import datetime
 
 def index(request):
     return render(request, 'index.html')
@@ -9,10 +11,10 @@ def index(request):
 def login(request):
     try:
         if request.method == 'POST':
-            nombre = request.POST["txtnom"]
+            rut = request.POST["txtrut"]
             password = request.POST["txtpas"]
 
-            usuario = Usuario.objects.filter(nombre=nombre).first()
+            usuario = Funcionario.objects.get(rut=rut)
             if usuario:
                 if usuario.estado == False:
                     return render(request, 'login.html', {
@@ -30,36 +32,33 @@ def login(request):
                 if check_password(password=password, hashed_password=usuario.password) == False:
                     usuario.cantidad_intentos += 1
                     usuario.save()
-                    print('paso aqui')
                     return render(request, 'login.html', {
-                        'r2': 'Nombre y/o contraseña incorrectos'
+                        'r2': 'Rut y/o contraseña incorrectos'
                     })
                 
                 usuario.cantidad_intentos = 0
                 request.session['idUsuario'] = usuario.id
-                request.session['nombre'] = usuario.nombre.upper()
-                request.session['tipo'] = usuario.tipo
+                request.session['nombre'] = usuario.nombres.upper()
+                request.session['tipo'] = usuario.cargo
                 request.session['estadoSesion'] = True
 
-                if usuario.tipo == 'admin':
+                historial = RegistroAccion(usuario=usuario, accion='Inicio de sesión', detalles='Inicio de sesión exitoso', fecha=datetime.now())
+                historial.save()
+
+                if usuario.cargo == 'admin':
                     return render(request, 'menu_admin.html', {
-                        "nombre": usuario.nombre.upper()
-                    })
-                
-                if usuario.tipo == 'funcionario':
-                    return render(request, 'menu_funcionarios.html', {
-                        "nombre": usuario.nombre.upper()
+                        "nombre": usuario.nombres.upper()
                     })
                 
                 if usuario.tipo == 'docente':
                     return render(request, 'menu_docente.html', {
-                        "nombre": usuario.nombre.upper()
+                        "nombre": usuario.nombres.upper()
                     })
 
 
             else:
                 return render(request, 'login.html', {
-                    'r2': 'Nombre y/o contraseña incorrectos'
+                    'r2': 'rut y/o contraseña incorrectos'
                 })
 
         elif request.method == 'GET':
@@ -79,10 +78,17 @@ def login(request):
 
 def logout(request):
     try:
+        id = request.session.get('idUsuario')
+        usuario = Funcionario.objects.get(id=id)
+        historial = RegistroAccion(usuario=usuario, accion='Cerrar Sesión', detalles='Sesión cerrada correctamente', fecha=datetime.now())
+        historial.save()
+
         del request.session['idUsuario']
         del request.session['nombre']
         del request.session['tipo']
         del request.session['estadoSesion']
+
+        
         return render(request, 'login.html', {
             'r': 'Sesión cerrada exitosamente'
         })
@@ -101,11 +107,6 @@ def menu_admin(request):
             return render(request, 'menu_admin.html', {
                 'nombre': nombre,
             })
-        elif tipo == 'funcionario':
-            return render(request, 'menu_funcionarios.html', {
-                'r2': 'No tiene permisos para acceder a esta página',
-                'nombre': nombre,
-            })
         elif tipo == 'docente':
             return render(request, 'menu_docente.html', {
                 'r2': 'No tiene permisos para acceder a esta página',
@@ -117,7 +118,7 @@ def menu_admin(request):
         })
 
 
-def menu_funcionario(request):
+def menu_docente(request):
     tipo = request.session.get('tipo')
     nombre = request.session.get('nombre')
     estadoSesion = request.session.get('estadoSesion')
@@ -127,13 +128,8 @@ def menu_funcionario(request):
                 'r2': 'No tiene permisos para acceder a esta página',
                 'nombre': nombre,
             })       
-        elif tipo == 'funcionario':
-            return render(request, 'menu_funcionarios.html', {
-                'nombre': nombre,
-            })
         elif tipo == 'docente':
             return render(request, 'menu_docente.html', {
-                'r2': 'No tiene permisos para acceder a esta página',
                 'nombre': nombre,
             })
     else:

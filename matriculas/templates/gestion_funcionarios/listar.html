@@ -8,6 +8,39 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
+    <!-- JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"
+    />
+    <!-- Default theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"
+    />
+    <!-- Semantic UI theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css"
+    />
+    <!-- Bootstrap theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.min.css"
+    />
+
+    <script src="
+          https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js
+          "></script>
+    <link
+      href="
+          https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
+          "
+      rel="stylesheet"
+    />
   </head>
   <body>
     <!-- Primera barra de navegación -->
@@ -46,7 +79,9 @@
             <a class="nav-link" href="#">Historial de Acciones</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="#">Ver Perfil</a></li>
-          <li class="nav-item"><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Cerrar Sesión</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -73,6 +108,16 @@
 
     <!-- Contenido: Listado de Funcionarios -->
     <div class="container mt-4">
+      {% if r %}
+      <script>
+        alertify.success("{{r}}");
+      </script>
+      {% endif %} {% if r2 %}
+      <script>
+        alertify.error("{{r2}}");
+      </script>
+      {% endif %}
+
       <h2>Listado de Funcionarios</h2>
 
       <!-- Tabla de funcionarios -->
@@ -90,22 +135,45 @@
               <th>Cursos</th>
               <th>Jefatura</th>
               <th>Asignatura</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <!-- Fila de ejemplo -->
+            {% for fun in funcionarios %}
             <tr>
-              <td>1</td>
-              <td>Juan</td>
-              <td>Pérez</td>
-              <td>Gómez</td>
-              <td>12.345.678-9</td>
-              <td>Docente</td>
-              <td>juan.perez@ejemplo.com</td>
-              <td>Matemáticas</td>
-              <td>Sí</td>
-              <td>Álgebra</td>
+              <td>{{fun.id}}</td>
+              <td>{{fun.nombres}}</td>
+              <td>{{fun.paterno}}</td>
+              <td>{{fun.materno}}</td>
+              <td>{{fun.rut}}</td>
+              <td>{{fun.cargo}}</td>
+              <td>{{fun.correo}}</td>
+              <td>
+                {% for cur in fun.cursos_normales.all %} 
+                {{ cur.nombre }}{% if not forloop.last %}, {% endif %} 
+                {% endfor %}
+              </td>
+              {% if fun.jefatura %}
+              <td>Si</td>
+              {% else %}
+              <td>No</td>
+              {% endif %}
+              <td>{{fun.asignatura}}</td>
+              <td>
+                <a
+                  href="/funcionarios/editar/{{fun.id}}"
+                  class="btn btn-warning"
+                  >Editar</a
+                >
+                <a
+                  href="/funcionarios/eliminar/{{fun.id}}"
+                  class="btn btn-danger"
+                  >Eliminar</a
+                >
+              </td>
             </tr>
+
+            {% endfor %}
             <!-- Puedes agregar más filas aquí con la misma estructura para cada funcionario -->
           </tbody>
         </table>

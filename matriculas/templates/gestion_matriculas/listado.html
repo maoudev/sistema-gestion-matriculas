@@ -10,9 +10,54 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <!-- JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"
+    />
+    <!-- Default theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"
+    />
+    <!-- Semantic UI theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css"
+    />
+    <!-- Bootstrap theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.min.css"
+    />
+
+    <script src="
+      https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js
+      "></script>
+    <link
+      href="
+      https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
+      "
+      rel="stylesheet"
+    />
+
     <style>
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Alinea horizontalmente */
+        justify-content: center; /* Alinea verticalmente */
+      }
+
       #datos-alumno {
         margin-top: 50px;
+      }
+
+      table {
+        width: 100%; /* Asegúrate de que la tabla ocupe el ancho del contenedor */
       }
     </style>
   </head>
@@ -20,13 +65,19 @@
     <nav class="navbar navbar-expand-lg bg-primary">
       <div class="container-fluid">
         {% if tipo == 'admin' %}
-          <a class="navbar-brand text-light" href="/menu_admin">Dashboard Administrador</a>
+        <a class="navbar-brand text-light" href="/menu_admin"
+          >Dashboard Administrador</a
+        >
 
         {% elif tipo == 'funcionario' %}
-          <a class="navbar-brand text-light" href="/menu_funcionario">Dashboard Funcionario</a>
-        
+        <a class="navbar-brand text-light" href="/menu_funcionario"
+          >Dashboard Funcionario</a
+        >
+
         {% elif tipo == 'docente' %}
-          <a class="navbar-brand text-light" href="/menu_docente">Dashboard Docente</a>
+        <a class="navbar-brand text-light" href="/menu_docente"
+          >Dashboard Docente</a
+        >
         {% endif %}
 
         <button
@@ -43,23 +94,27 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             {% if tipo == 'admin' %}
-              <a class="nav-link text-light" href="/funcionarios/agregar"
-                >Gestión Funcionarios</a
-              >
-              <a class="nav-link text-light active" aria-current="page" href="#"
-                >Gestión Matriculas</a
-              >
-              <a class="nav-link text-light" href="#">Gestión Cursos</a>
-              <a class="nav-link text-light" href="#">Gestión Nacionalidades</a>
-              <a class="nav-link text-light" href="#">Historial de Acciones</a>
+            <a class="nav-link text-light" href="/funcionarios/agregar"
+              >Gestión Funcionarios</a
+            >
+            <a class="nav-link text-light active" aria-current="page" href="#"
+              >Gestión Matriculas</a
+            >
+            <a class="nav-link text-light" href="/cursos">Gestión Cursos</a>
+            <a class="nav-link text-light" href="/nacionalidades"
+              >Gestión Nacionalidades</a
+            >
+            <a class="nav-link text-light" href="/historial"
+              >Historial de Acciones</a
+            >
             {% elif tipo == 'funcionario' %}
-              <a class="nav-link text-light active" aria-current="page" href="#"
-              >Gestión Matriculas</a>
-              <a class="nav-link" href="#">Reportes</a>
+            <a class="nav-link text-light active" aria-current="page" href="#"
+              >Gestión Matriculas</a
+            >
+            <a class="nav-link" href="#">Reportes</a>
             {% endif %}
             <a class="nav-link text-light" href="#">Ver Perfil</a>
             <a class="nav-link" href="/logout">Cerrar Sesión</a>
-
           </div>
         </div>
       </div>
@@ -69,16 +124,12 @@
       <div class="collapse navbar-collapse" id="navbarSub">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="agregar">Agregar Matrícula</a>
+            <a class="nav-link" href="/matriculas/agregar">Agregar Matrícula</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="editar">Editar Matrícula</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="eliminar">Eliminar Matrícula</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="listar">Listado de Matrícula</a>
+            <a class="nav-link active" href="/matriculas/listar"
+              >Listado de Matrícula</a
+            >
           </li>
         </ul>
       </div>
@@ -86,27 +137,13 @@
 
     <main class="container-fluid w-50 pb-5">
       {% if r %}
-      <div class="alert alert-success alert-dismissible" role="alert">
-        <div>{r}</div>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-      {% endif %} 
-      
-      {% if r2 %}
-      <div class="alert alert-danger alert-dismissible" role="alert">
-        <div>{{ r2 }}</div>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
+      <script>
+        alertify.success("{{r}}");
+      </script>
+      {% endif %} {% if r2 %}
+      <script>
+        alertify.error("{{r2}}");
+      </script>
       {% endif %}
 
       <h1 class="text-center my-5 fw-bold">Eliminar matrícula</h1>
@@ -115,25 +152,83 @@
         <thead>
           <tr>
             <th scope="col">ID</th>
+            <th scope="col">Periodo</th>
+            <th scope="col">Rut</th>
             <th scope="col">Nombres</th>
             <th scope="col">Apellido Paterno</th>
+            <th scope="col">Apellido Materno</th>
+            <th scope="col">Edad</th>
+            <th scope="col">Nacionalidades</th>
             <th scope="col">Curso</th>
-            <th scope="col">Promedio</th>
+            <th scope="col">Sala</th>
+            <th scope="col">Promedio anterior</th>
+            <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {% for matricula in matriculas %}
           <tr>
             <th scope="row">{{ matricula.id }}</th>
+            <td>{{ matricula.periodo.anio }}</td>
+            <td>{{ matricula.alumno.rut }}</td>
             <td>{{ matricula.alumno.nombres }}</td>
-            <td>{{ matricula.alumno.apellido_paterno }}</td>
-            <td>{{ matricula.alumno.curso }}</td>
-            <td>{{ matricula.alumno.promedio }}</td>
+            <td>{{ matricula.alumno.paterno }}</td>
+            <td>{{ matricula.alumno.materno }}</td>
+            <td>{{ matricula.alumno.edad }}</td>
+            <td>
+              {% for nac in matricula.alumno.nacionalidades.all %}
+              {{nac.nombre}}{% if not forloop.last %}, {% endif %} 
+              {% endfor %}
+            </td>
+            <td>{{ matricula.curso.nombre }}</td>
+            <td>{{ matricula.curso.sala.numero }}</td>
+            <td>{{ matricula.alumno.promedio_anterior }}</td>
+            <td>
+              <button
+                onclick="eliminarMatricula({{ matricula.id }})"
+                class="btn btn-danger"
+              >
+                Eliminar
+              </button>
+              <a
+                href="/matriculas/editar/{{ matricula.id }}"
+                class="btn btn-warning"
+                >Editar</a
+              >
+            </td>
           </tr>
+
           {% endfor %}
         </tbody>
       </table>
     </main>
+
+    <script>
+      const eliminarMatricula = (id) => {
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
+        });
+        swalWithBootstrapButtons
+          .fire({
+            title: "¿Estás seguro de realizar esta acción?",
+            text: "No se puede revertir",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar",
+            reverseButtons: true,
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "/matriculas/eliminar/" + id;
+            } else result.dismiss === Swal.DismissReason.cancel;
+          });
+      };
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

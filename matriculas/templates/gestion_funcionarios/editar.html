@@ -76,94 +76,127 @@
       <h2>Editar Funcionario</h2>
 
       <!-- Barra de búsqueda -->
-      <form class="form-inline mb-4">
-        <label class="sr-only" for="buscarId">Buscar Funcionario</label>
-        <input
-          type="text"
-          class="form-control mb-2 mr-sm-2"
-          id="buscarId"
-          placeholder="Buscar Funcionario por ID"
-        />
-        <button type="button" class="btn btn-primary mb-2">Buscar</button>
-      </form>
+      <form method="post" action="/funcionarios/editar/{{funcionario.id}}">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label for="cboest">Estado</label>
+            <select class="form-control" id="cboest" name="cboest" required>
+              <option value="" disabled>Seleccione un estado</option>
+              <option value="activo" {% if funcionario.estado %}selected{% endif %}>Activo</option>
+              <option value="inactivo" {% if funcionario.estado == False %}selected{% endif %}>Inactivo</option>
+            </select>
+          </div>
+        </div>
 
-      <!-- Formulario de edición -->
-      <form>
         <div class="row">
           <!-- Campo Nombres -->
           <div class="col-md-4 mb-3">
-            <label for="nombres">Nombres</label>
+            <label for="txtnom">Nombres</label>
             <input
               type="text"
               class="form-control"
-              id="nombres"
+              id="txtnom"
+              name="txtnom"
+              value="{{ funcionario.nombres }}"
               placeholder="Nombres"
+              required
             />
           </div>
           <!-- Campo Apellido Paterno -->
           <div class="col-md-4 mb-3">
-            <label for="apellidoPaterno">Apellido Paterno</label>
+            <label for="txtpat">Apellido Paterno</label>
             <input
               type="text"
               class="form-control"
-              id="apellidoPaterno"
+              id="txtpat"
+              value="{{ funcionario.paterno }}"
+              name="txtpat"
               placeholder="Apellido Paterno"
+              required
             />
           </div>
           <!-- Campo Apellido Materno -->
           <div class="col-md-4 mb-3">
-            <label for="apellidoMaterno">Apellido Materno</label>
+            <label for="txtmat">Apellido Materno</label>
             <input
               type="text"
               class="form-control"
-              id="apellidoMaterno"
+              id="txtmat"
+              name="txtmat"
+              value="{{ funcionario.materno }}"
               placeholder="Apellido Materno"
+              required
             />
           </div>
         </div>
         <div class="row">
-          <!-- Campo ID -->
-          <div class="col-md-4 mb-3">
-            <label for="id">ID</label>
-            <input type="text" class="form-control" id="id" placeholder="ID" />
-          </div>
           <!-- Campo RUT -->
-          <div class="col-md-4 mb-3">
-            <label for="rut">RUT</label>
+          <div class="col-md-6 mb-3">
+            <label for="txtrut">RUT</label>
             <input
               type="text"
               class="form-control"
-              id="rut"
-              placeholder="RUT"
+              name="txtrut"
+              id="txtrut"
+              maxlength="10"
+              value="{{ funcionario.rut }}"
+              placeholder="Ej: 11222333-4"
+              required
             />
           </div>
           <!-- Campo Cargo -->
-          <div class="col-md-4 mb-3">
-            <label for="cargo">Cargo</label>
-            <input
-              type="text"
-              class="form-control"
-              id="cargo"
-              placeholder="Cargo"
-            />
+          <div class="col-md-6 mb-3">
+            <label for="cbocar">Cargo</label>
+            <select class="form-control" id="cbocar" name="cbocar" required>
+              <option value="" disabled>Seleccione un cargo</option>
+              <option value="docente" {% if funcionario.cargo == 'docente' %}selected{% endif %}>Docente</option>
+              <option value="admin" {% if funcionario.cargo == 'admin' %}selected{% endif %}>Administrador</option>
+            </select>
           </div>
         </div>
         <div class="row">
           <!-- Campo Correo -->
           <div class="col-md-4 mb-3">
-            <label for="correo">Correo</label>
+            <label for="txtema">Correo</label>
             <input
               type="email"
               class="form-control"
-              id="correo"
+              id="txtema"
+              name="txtema"
+              value="{{ funcionario.correo }}"
               placeholder="Correo"
             />
           </div>
           <!-- Select Cursos -->
           <div class="col-md-4 mb-3">
-            <label for="cursos">Cursos</label>
-            <select class="form-control" id="cursos">
+            <label for="cbocur">Cursos</label>
+            <select
+              class="form-control"
+              id="cbocur"
+              name="cbocur"
+              multiple
+              required
+            >
               <option value="" selected disabled>Seleccione un curso</option>
+              {% for cur in cursos %}
+              <option value="{{ cur.id }}">{{ cur.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="cbocurjef">Cursos Jefatura</label>
+            <select
+              class="form-control"
+              id="cbocurjef"
+              name="cbocurjef"
+              multiple
+            >
+              <option value="" selected disabled>Seleccione un curso</option>
+              {% for cur in cursos %}
+              <option value="{{ cur.id }}">{{ cur.nombre }}</option>
+              {% endfor %}
             </select>
           </div>
           <!-- Radio Jefatura -->
@@ -173,37 +206,56 @@
               <input
                 class="form-check-input"
                 type="radio"
-                name="jefatura"
-                id="jefaturaSi"
-                value="si"
+                name="rdojef"
+                id="rdojef1"
+                value="true"
               />
-              <label class="form-check-label" for="jefaturaSi">Sí</label>
+              <label class="form-check-label" for="rdojef1">Sí</label>
             </div>
             <div class="form-check">
               <input
                 class="form-check-input"
                 type="radio"
-                name="jefatura"
-                id="jefaturaNo"
-                value="no"
+                name="rdojef"
+                id="rdojef2"
+                value="false"
                 checked
               />
-              <label class="form-check-label" for="jefaturaNo">No</label>
+              <label class="form-check-label" for="rdojef2">No</label>
             </div>
           </div>
         </div>
         <div class="row">
           <!-- Select Asignatura -->
           <div class="col-md-4 mb-3">
-            <label for="asignatura">Asignatura</label>
-            <select class="form-control" id="asignatura">
-              <option value="" selected disabled>
-                Seleccione una asignatura
-              </option>
-            </select>
+            <label for="txtasi">Asignatura</label>
+            <input
+              type="text"
+              class="form-control"
+              name="txtasi"
+              id="txtasi"
+              value="{{ funcionario.asignatura }}"
+              placeholder="Asignatura"
+              required
+            />
           </div>
         </div>
-        <!-- Botón Editar -->
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="txtpas">Contraseña</label>
+            <input
+              type="password"
+              class="form-control"
+              id="txtpas"
+              name="txtpas"
+              placeholder="********"
+              minlength="8"
+              required
+            />
+          </div>
+        </div>
+        <!-- Botón Agregar -->
         <button type="submit" class="btn btn-primary">Editar</button>
       </form>
     </div>

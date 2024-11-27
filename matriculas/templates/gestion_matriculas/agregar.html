@@ -10,6 +10,16 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <script src="
+      https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js
+      "></script>
+    <link
+      href="
+      https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
+      "
+      rel="stylesheet"
+    />
+
     <style>
       #datos-alumno {
         margin-top: 50px;
@@ -20,13 +30,19 @@
     <nav class="navbar navbar-expand-lg bg-primary">
       <div class="container-fluid">
         {% if tipo == 'admin' %}
-          <a class="navbar-brand text-light" href="/menu_admin">Dashboard Administrador</a>
+        <a class="navbar-brand text-light" href="/menu_admin"
+          >Dashboard Administrador</a
+        >
 
         {% elif tipo == 'funcionario' %}
-          <a class="navbar-brand text-light" href="/menu_funcionario">Dashboard Funcionario</a>
-        
+        <a class="navbar-brand text-light" href="/menu_funcionario"
+          >Dashboard Funcionario</a
+        >
+
         {% elif tipo == 'docente' %}
-          <a class="navbar-brand text-light" href="/menu_docente">Dashboard Docente</a>
+        <a class="navbar-brand text-light" href="/menu_docente"
+          >Dashboard Docente</a
+        >
         {% endif %}
 
         <button
@@ -43,23 +59,27 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             {% if tipo == 'admin' %}
-              <a class="nav-link text-light" href="/funcionarios/agregar"
-                >Gestión Funcionarios</a
-              >
-              <a class="nav-link text-light active" aria-current="page" href="#"
-                >Gestión Matriculas</a
-              >
-              <a class="nav-link text-light" href="#">Gestión Cursos</a>
-              <a class="nav-link text-light" href="#">Gestión Nacionalidades</a>
-              <a class="nav-link text-light" href="#">Historial de Acciones</a>
+            <a class="nav-link text-light" href="/funcionarios/agregar"
+              >Gestión Funcionarios</a
+            >
+            <a class="nav-link text-light active" aria-current="page" href="#"
+              >Gestión Matriculas</a
+            >
+            <a class="nav-link text-light" href="/cursos">Gestión Cursos</a>
+            <a class="nav-link text-light" href="/nacionalidades"
+              >Gestión Nacionalidades</a
+            >
+            <a class="nav-link text-light" href="/historial"
+              >Historial de Acciones</a
+            >
             {% elif tipo == 'funcionario' %}
-              <a class="nav-link text-light active" aria-current="page" href="#"
-              >Gestión Matriculas</a>
-              <a class="nav-link" href="#">Reportes</a>
+            <a class="nav-link text-light active" aria-current="page" href="#"
+              >Gestión Matriculas</a
+            >
+            <a class="nav-link" href="#">Reportes</a>
             {% endif %}
             <a class="nav-link text-light" href="#">Ver Perfil</a>
             <a class="nav-link" href="/logout">Cerrar Sesión</a>
-
           </div>
         </div>
       </div>
@@ -69,16 +89,14 @@
       <div class="collapse navbar-collapse" id="navbarSub">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="agregar">Agregar Matrícula</a>
+            <a class="nav-link active" href="/matriculas/agregar"
+              >Agregar Matrícula</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="editar">Editar Matrícula</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="eliminar">Eliminar Matrícula</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="listar">Listado de Matrícula</a>
+            <a class="nav-link" href="/matriculas/listar"
+              >Listado de Matrícula</a
+            >
           </li>
         </ul>
       </div>
@@ -86,33 +104,43 @@
 
     <main class="container-fluid w-50 pb-5">
       {% if r %}
-      <div class="alert alert-success alert-dismissible" role="alert">
-        <div>{r}</div>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
+      <script>
+        Swal.fire({
+          title: "¡Éxito!",
+          text: "{{ r }}",
+          icon: "success",
+        });
+      </script>
       {% endif %} 
       
       {% if r2 %}
-      <div class="alert alert-danger alert-dismissible" role="alert">
-        <div>{{ r2 }}</div>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
+      <script>
+        Swal.fire({
+          title: "Oh no...",
+          text: "{{ r2 }}",
+          icon: "error",
+        });
+      </script>
       {% endif %}
 
       <h1 class="text-center my-5 fw-bold">Agregar matrícula</h1>
-      <form action="/agregar_matricula" method="post" class="row g-3">
-        <h2 class="fs-3">Datos del apoderado</h2>
+      <form
+        action="/matriculas/agregar_matricula"
+        method="post"
+        class="row g-3"
+      >
+        {% csrf_token %}
 
+        <div class="col-md-6">
+          <select class="form-select" name="cboper" id="cboper" required>
+            <option selected disabled value="">Selecciona un periodo</option>
+            {% for per in periodos %}
+            <option value="{{ per.id }}">{{ per.anio }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <h2 class="fs-3">Datos del apoderado</h2>
         <div class="col-md-12">
           <label for="txtnom" class="form-label">Nombres</label>
           <input
@@ -280,28 +308,13 @@
         </div>
 
         <div class="col-md-12">
-          <label for="txtcuralu" class="form-label">Curso</label>
-          <input
-            type="text"
-            class="form-control"
-            name="txtcuralu"
-            id="txtcuralu"
-            maxlength="2"
-            placeholder="Ej: 1A"
-            required
-          />
-        </div>
-
-        <div class="col-md-12">
-          <label for="txtsalalu" class="form-label">Sala</label>
-          <input
-            type="number"
-            class="form-control"
-            name="txtsalalu"
-            id="txtsalalu"
-            placeholder="Ej: 203"
-            required
-          />
+          <label for="cbocur" class="form-label">Curso</label>
+          <select id="cbocur" name="cbocur" class="form-select" required>
+            <option selected disabled value="">Selecciona un curso</option>
+            {% for cur in cursos %}
+            <option value="{{ cur.id }}">{{ cur.nombre }}</option>
+            {% endfor %}
+          </select>
         </div>
 
         <div class="col-md-12">
