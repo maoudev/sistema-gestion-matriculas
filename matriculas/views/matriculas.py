@@ -30,10 +30,12 @@ def cargar_cursos(request):
     periodo_seleccionado = Periodo.objects.get(id=periodo_id)
     cursos = Curso.objects.filter(periodo=periodo_seleccionado).values()
     nacionalidades = Nacionalidad.objects.all().values()
+    periodos = Periodo.objects.all().values()
     return render(request, 'gestion_matriculas/agregar.html', {
         'cursos': cursos,
         'nacionalidades': nacionalidades,
         'periodo': periodo_seleccionado,
+        'periodos': periodos,
     })
 
 def mostrar_editar(request, id):
@@ -42,6 +44,16 @@ def mostrar_editar(request, id):
     if tipo and estadoSesion:
         if tipo == 'admin':
             matricula = Matricula.objects.get(id=id)
+            if matricula is None:
+                matriculas = Matricula.objects.select_related('periodo', 'alumno', 'curso', 'curso__sala').prefetch_related('alumno__nacionalidades')
+                return render(request, 'gestion_matriculas/listado.html', {
+                    'tipo': tipo,
+                    'matriculas': matriculas,
+                    'r2': 'Matricula no encontrada',
+                })
+            
+    
+
             periodo = matricula.periodo
             nacionalidades = Nacionalidad.objects.all().values()
             cursos = Curso.objects.filter(periodo=periodo).values()
@@ -49,7 +61,6 @@ def mostrar_editar(request, id):
                 'tipo': tipo,
                 'matricula': matricula,
                 'nacionalidades': nacionalidades,
-                'periodo': periodo,
                 'cursos': cursos,
                 'id': id,
             })
@@ -242,16 +253,16 @@ def registrar_matricula(request):
 
 def editar_matricula(request, id):
     try:
-        matricula = Matricula.objects.get(id=id)
+        matricula = Matricula.objects.filter(id=id).first()
 
-        periodo = request.POST["cboper"]
-        periodo_seleccionado = Periodo.objects.get(id=periodo)
-
-        if periodo_seleccionado.activo == False:
-            return render(request, 'gestion_matriculas/agregar.html', {
-                'r2': 'El periodo seleccionado no está activo',
+        if matricula is None:
+            matriculas = Matricula.objects.select_related('periodo', 'alumno', 'curso', 'curso__sala').prefetch_related('alumno__nacionalidades')
+            return render(request, 'gestion_matriculas/listado.html', {
+                'r2': 'Matricula no encontrada',
+                'tipo': tipo,
+                'matriculas': matriculas,
             })
-        
+
         # Apoderado
         nombre_apoderado = request.POST["txtnom"]
         apellido_paterno_apoderado = request.POST["txtapepat"]
@@ -292,7 +303,6 @@ def editar_matricula(request, id):
         matricula.alumno.save()
         matricula.alumno.nacionalidades.set(nacionalidades_alumno)
 
-        matricula.periodo = periodo_seleccionado
         matricula.curso = curso_seleccionado
         matricula.save()
 
@@ -326,7 +336,16 @@ def editar_matricula(request, id):
     
 def eliminar_matricula(request, id):
     try:
-        matricula = Matricula.objects.get(id=id)
+        matricula = Matricula.objects.filter(id=id).first()
+
+        if matricula is None:
+            matriculas = Matricula.objects.select_related('periodo', 'alumno', 'curso', 'curso__sala').prefetch_related('alumno__nacionalidades')
+            return render(request, 'gestion_matriculas/listado.html', {
+                'r2': 'Matricula no encontrada',
+                'tipo': tipo,
+                'matriculas': matriculas,
+            })
+
         matricula.delete()
 
         id_usuario = request.session.get('idUsuario')

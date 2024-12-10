@@ -65,7 +65,17 @@ def mostrar_agregar(request):
 
 
 def mostrar_editar(request, id):
-    funcionario = Funcionario.objects.get(id=id)
+    funcionario = Funcionario.objects.filter(id=id).first()
+
+    if funcionario is None:
+        cursos = Curso.objects.values().all()
+        funcionarios = Funcionario.objects.prefetch_related('cursos')
+        return render(request, 'gestion_funcionarios/listar.html', {
+            'r2': 'Funcionario no encontrado',
+            "funcionarios": funcionarios,
+            "cursos": cursos
+            })
+
     if request.method == "POST":
         clave = request.POST.get("txtpas")
         nombres = request.POST.get("txtnom")
@@ -87,6 +97,7 @@ def mostrar_editar(request, id):
         funcionario.correo = correo
         funcionario.cargo = cargo
         funcionario.asignatura = asignatura
+        funcionario.jefatura = jefatura
         if clave:
             funcionario.password = hash_password(clave)
 
@@ -131,7 +142,16 @@ def mostrar_editar(request, id):
 
 
 def mostrar_eliminar(request, id):
-    funcionario = get_object_or_404(Funcionario, id=id)
+    funcionario = Funcionario.objects.filter(id=id).first()
+    if funcionario is None:
+        cursos = Curso.objects.values().all()
+        funcionarios = Funcionario.objects.prefetch_related('cursos')
+        return render(request, 'gestion_funcionarios/listar.html', {
+            'r2': 'Funcionario no encontrado',
+            "funcionarios": funcionarios,
+            "cursos": cursos
+            })
+    
     funcionario.delete()
 
     usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))

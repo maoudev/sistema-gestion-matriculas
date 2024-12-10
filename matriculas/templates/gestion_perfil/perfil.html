@@ -35,6 +35,7 @@
     />
   </head>
   <body>
+    {% if perfil.cargo == 'admin' %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <a class="navbar-brand" href="/menu_admin">Dashboard Administrador</a>
       <button
@@ -80,6 +81,37 @@
         </ul>
       </div>
     </nav>
+    {% endif %} 
+    {% if perfil.cargo == 'docente' %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/menu_admin">Dashboard Docente</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarMain"
+        aria-controls="navbarMain"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="/docente/cursos">Ver Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/perfil">Ver Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Cerrar Sesión</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    {% endif %}
 
     <main class="container-fluid w-50 pb-5">
       {% if r %}
@@ -97,12 +129,13 @@
       <!-- Perfil del Usuario -->
       {% if perfil %}
       <div class="card my-5">
-        <div class="card-header bg-primary text-white">
-          Perfil del Usuario
-        </div>
+        <div class="card-header bg-primary text-white">Perfil del Usuario</div>
         <div class="card-body">
           <p><strong>RUT:</strong> {{ perfil.rut }}</p>
-          <p><strong>Nombre:</strong> {{ perfil.nombres }} {{ perfil.paterno }} {{ perfil.materno }}</p>
+          <p>
+            <strong>Nombre:</strong> {{ perfil.nombres }} {{ perfil.paterno }}
+            {{ perfil.materno }}
+          </p>
           <p><strong>Correo:</strong> {{ perfil.correo }}</p>
           <p><strong>Cargo:</strong> {{ perfil.cargo }}</p>
         </div>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Cursos</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <!-- JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"
+    />
+    <!-- Default theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"
+    />
+    <!-- Semantic UI theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css"
+    />
+    <!-- Bootstrap theme -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.min.css"
+    />
+
+    <script src="
+          https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js
+          "></script>
+    <link
+      href="
+          https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
+          "
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Primera barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/menu_admin">Dashboard Docente</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarMain"
+        aria-controls="navbarMain"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/docente/cursos">Ver Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/perfil">Ver Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Cerrar Sesión</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    {% if r %}
+    <script>
+      alertify.success("{{r}}");
+    </script>
+    {% endif %} {% if r2 %}
+    <script>
+      alertify.error("{{r2}}");
+    </script>
+    {% endif %}
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+      <h1>Cursos</h1>
+
+      <!-- Formulario para agregar curso -->
+
+      <form method="post" action="/docente/cursos/filtrar/periodo" class="mb-4">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            <label for="cboper2">Periodos</label>
+            <select class="form-control" id="cboper2" name="cboper2" required>
+              <option value="" disabled selected>Seleccione un periodo</option>
+              {% for periodo in periodos %}
+              <option value="{{ periodo.id }}">{{ periodo.anio }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+      </form>
+      <!-- Tabla de cursos -->
+
+      <h2>Jefatura</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Cantidad de Alumnos</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for curso in cursos_jefatura %}
+          <tr>
+            <td>{{ curso.nombre }}</td>
+            <td>{{ curso.cantidad_alumnos }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center text-muted">
+              No hay cursos registrados.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h2>Cursos donde imparte clases</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Cantidad de Alumnos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for curso in cursos_clases %}
+          <tr>
+            <td>{{ curso.nombre }}</td>
+            <td>{{ curso.cantidad_alumnos }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center text-muted">
+              No hay cursos registrados.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h2>Todos los cursos</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Cantidad de Alumnos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for curso in cursos %}
+          <tr>
+            <td>{{ curso.nombre }}</td>
+            <td>{{ curso.cantidad_alumnos }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center text-muted">
+              No hay cursos registrados.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

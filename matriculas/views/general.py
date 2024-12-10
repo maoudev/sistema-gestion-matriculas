@@ -50,7 +50,7 @@ def login(request):
                         "nombre": usuario.nombres.upper()
                     })
                 
-                if usuario.tipo == 'docente':
+                if usuario.cargo == 'docente':
                     return render(request, 'menu_docente.html', {
                         "nombre": usuario.nombres.upper()
                     })

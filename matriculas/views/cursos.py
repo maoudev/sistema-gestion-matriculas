@@ -47,7 +47,10 @@ def mostrar_gestion_cursos(request):
         })
 
 def editar_curso(request, curso_id):
-    curso = get_object_or_404(Curso, id=curso_id)
+    curso = Curso.objects.filter(id=curso_id).first()
+    if curso is None:
+        return redirect('gestion_cursos')
+
     if request.method == "POST":
         curso.nombre = request.POST.get("nombre")
         curso.save()
@@ -58,7 +61,10 @@ def editar_curso(request, curso_id):
     return render(request, "gestion_cursos/editar_curso.html", {"curso": curso})
 
 def eliminar_curso(request, pk):
-    curso = get_object_or_404(Curso, pk=pk)
+    curso = Curso.objects.filter(id=pk).first()
+    if curso is None:
+        return redirect('gestion_cursos')
+
     curso.delete()
 
     usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))
@@ -105,7 +111,11 @@ def mostrar_gestion_periodos(request):
     
 
 def editar_periodo(request, id):
-    periodo = Periodo.objects.get(id=id)
+    periodo = Periodo.objects.filter(id=id).first()
+
+    if periodo is None:
+        return redirect('gestion_periodos')
+
     if request.method == "POST":
         periodo.anio = request.POST.get("txtani")
         estado = request.POST.get("cboest")
@@ -123,7 +133,10 @@ def editar_periodo(request, id):
     return render(request, "gestion_cursos/editar_periodo.html", {"periodo": periodo})
 
 def eliminar_periodo(request, id):
-    periodo = Periodo.objects.get(id=id)
+    periodo = Periodo.objects.filter(id=id).first()
+    if periodo is None:
+        return redirect('gestion_periodos')
+    
     periodo.delete()
 
     usuario = Funcionario.objects.get(id=request.session.get('idUsuario'))

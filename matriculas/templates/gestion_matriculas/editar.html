@@ -110,14 +110,6 @@
       >
         {% csrf_token %}
 
-        <div class="col-md-6">
-          <select class="form-select" name="cboper" id="cboper" required>
-            <option selected disabled value="">Selecciona un periodo</option>
-            {% for per in periodos %}
-            <option value="{{ per.id }}" {%if per.id == matricula.periodo.id%}selected{% endif %}>{{ per.anio }}</option>
-            {% endfor %}
-          </select>
-        </div>
 
         <h2 class="fs-3">Datos del apoderado</h2>
         <div class="col-md-12">

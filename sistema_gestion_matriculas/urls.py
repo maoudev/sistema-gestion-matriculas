@@ -1,13 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from matriculas.views import general
-from matriculas.views import matriculas
-from matriculas.views import funcionarios
-from matriculas.views import cursos
-from matriculas.views import nacionalidades
-from matriculas.views import historial_acciones
-from matriculas.views import perfil
+from matriculas.views import general, matriculas, funcionarios, cursos, nacionalidades, historial_acciones, perfil, docente
 
 
 urlpatterns = [
@@ -17,6 +11,7 @@ urlpatterns = [
     path('login', general.login),
     path('logout', general.logout),
     path("menu_admin", general.menu_admin),
+    path("menu_docente", general.menu_docente),
 
     # Matriculas
     path('matriculas/agregar', matriculas.mostrar_agregar),
@@ -44,10 +39,12 @@ urlpatterns = [
     path('cursos/periodos/editar/<int:id>/', cursos.editar_periodo, name='editar_periodo'),
     path('cursos/periodos/eliminar/<int:id>/', cursos.eliminar_periodo, name='eliminar_periodo'),
 
-    
+    # docente
+    path('docente/cursos', docente.mostrar_cursos, name='cursos_docente'),
+    path('docente/cursos/filtrar/periodo', docente.filtrar_por_periodo),
 
     #nacionalidad
-     path("nacionalidades/", nacionalidades.gestionar_nacionalidades, name="gestion_nacionalidades"),
+    path("nacionalidades/", nacionalidades.gestionar_nacionalidades, name="gestion_nacionalidades"),
     path("nacionalidades/editar/<int:nacionalidad_id>/", nacionalidades.editar_nacionalidad, name="editar_nacionalidad"),
     path("nacionalidades/eliminar/<int:nacionalidad_id>/", nacionalidades.eliminar_nacionalidad, name="eliminar_nacionalidad"),
 
