@@ -92,7 +92,7 @@
       </script>
       {% endif %}
 
-      <h1 class="text-center my-5 fw-bold">Bienvenido {{nombre}}</h1>
+      <h1 class="text-center my-5 fw-bold">Perfil {{nombres}}</h1>
 
       <!-- Perfil del Usuario -->
       {% if perfil %}
@@ -105,6 +105,7 @@
           <p><strong>Nombre:</strong> {{ perfil.nombres }} {{ perfil.paterno }} {{ perfil.materno }}</p>
           <p><strong>Correo:</strong> {{ perfil.correo }}</p>
           <p><strong>Cargo:</strong> {{ perfil.cargo }}</p>
+          <p><strong>Jefatura:</strong> {{ perfil.jefatura }}</p>
         </div>
       </div>
       {% endif %}
