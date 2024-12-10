@@ -7,6 +7,7 @@ from matriculas.views import funcionarios
 from matriculas.views import cursos
 from matriculas.views import nacionalidades
 from matriculas.views import historial_acciones
+from matriculas.views import perfil
 
 
 urlpatterns = [
@@ -52,4 +53,8 @@ urlpatterns = [
 
     #historial
     path('historial/', historial_acciones.historial_acciones, name='historial_acciones'),
+
+    #Perfil
+    path('perfil/', perfil.mostrar_perfil, name='perfil'),
+    path('perfil/editar', perfil.editar_perfil, name='editar_perfil'),
 ]
