@@ -14,7 +14,7 @@ def login(request):
             rut = request.POST["txtrut"]
             password = request.POST["txtpas"]
 
-            usuario = Funcionario.objects.get(rut=rut)
+            usuario = Funcionario.objects.filter(rut=rut).first()
             if usuario:
                 if usuario.estado == False:
                     return render(request, 'login.html', {
